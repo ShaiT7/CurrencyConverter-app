@@ -2,11 +2,7 @@ import { Component, OnInit} from '@angular/core';
 import { HttpClient, HttpErrorResponse} from '@angular/common/http';
 import { Observable, throwError} from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
-
-/*interface Food {
-  value: string;
-  viewValue: string;
-}*/
+import { ConverterserviceService } from '../converterservice.service';
 
 @Component({
   selector: 'app-currency-converter',
@@ -16,7 +12,7 @@ import { catchError, retry } from 'rxjs/operators';
 
 export class CurrencyConverterComponent implements OnInit {
 
-  constructor(private http:HttpClient) { }
+  constructor(private http:HttpClient, private ConverterService:ConverterserviceService) { }
 
   numCur: number = 1;
 
@@ -26,7 +22,12 @@ export class CurrencyConverterComponent implements OnInit {
   toList: any;
 
   listHistory: any = [];
-
+  result:any={
+    value:"",
+    from:"",
+    to:"",
+    total:""
+  };
   fromChoosen: string = "";
   toChoosen: string = "";
 
@@ -39,7 +40,7 @@ export class CurrencyConverterComponent implements OnInit {
         this.getToList();
       });
     },
-      (error:HttpErrorResponse)=>{console.log("Error")}
+      (error:HttpErrorResponse)=>{console.log("Error"); this.showWarning();}
     );
   }
 
@@ -74,17 +75,23 @@ export class CurrencyConverterComponent implements OnInit {
     // console.log(this.toList);
   };
 
-  clearHistory(){
+  // clearHistory() {
 
-    this.listHistory= [] as any;
+  //   //this.listHistory = [] as any;
 
-  }
+  //   this.result={
+  //     value:"",
+  //     from:"",
+  //     to:"",
+  //     total:""
+  //   };
 
-  inputOnChange(value:string){
+  // }
+
+  inputOnChange(value:string) {
     let ChosCur:number;
     let total:number;
 
- 
     if (this.fromChoosen != this.JsonCurrencyData.base){
       total =parseInt(value)/this.JsonCurrencyData.rates[this.fromChoosen]* this.JsonCurrencyData.rates[this.toChoosen];
     }
@@ -104,13 +111,15 @@ export class CurrencyConverterComponent implements OnInit {
         alert("please choose Currency");
     } else {
 
-      this.listHistory.unshift({
-        value:value,
-        from:this.fromChoosen,
-        to:this.toChoosen,
-        total:total
-      });
+    this.result={
+      value:value,
+      from:this.fromChoosen,
+      to:this.toChoosen,
+      total:total
+    };
 
+      // this.listHistory.unshift(this.result);
+      this.ConverterService.unshiftHistory(this.result);
     }
 
   }

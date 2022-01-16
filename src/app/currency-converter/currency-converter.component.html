@@ -28,17 +28,17 @@
 <div>
   <button mat-button (click)="inputOnChange(inputValue.value)" color="primary">Calculate</button>
 
-  <button mat-button (click)="clearHistory()" color="primary">Clear History</button>
+  <!-- <button mat-button (click)="clearHistory()" color="primary">Clear History</button> -->
 </div>
 
 <br><br>
 <div>
-    <div *ngFor="let item of listHistory" class="history">
-        <span>{{item.value}}</span>
-        <span>&nbsp;{{item.from}}</span>
+    <div class="history" *ngIf="result.value != ''">
+        <span>{{result.value}}</span>
+        <span>&nbsp;{{result.from}}</span>
         <span>&nbsp;=&nbsp;</span>
-        <span>{{item.total}}</span>
-        <span>&nbsp;{{item.to}}</span>
+        <span>{{result.total}}</span>
+        <span>&nbsp;{{result.to}}</span>
     </div>
 </div>
 
