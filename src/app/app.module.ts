@@ -10,8 +10,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { CurrencyConverterHistoryComponent } from './currency-converter-history/currency-converter-history.component';
 
 const appRoutes:Routes=[
-  {path:'currencyconverter', component: CurrencyConverterComponent},
-  {path:'currencyconverterhistory', component: CurrencyConverterHistoryComponent}
+  {path:'index', component: CurrencyConverterComponent},
+  {path:'history', component: CurrencyConverterHistoryComponent}
 ]
 
 @NgModule({
