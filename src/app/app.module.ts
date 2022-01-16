@@ -10,7 +10,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { CurrencyConverterHistoryComponent } from './currency-converter-history/currency-converter-history.component';
 
 const appRoutes:Routes=[
-  {path:'index', component: CurrencyConverterComponent},
+  {path: '', redirectTo: '/converter', pathMatch: 'full'},
+  {path:'converter', component: CurrencyConverterComponent},
   {path:'history', component: CurrencyConverterHistoryComponent}
 ]
 
