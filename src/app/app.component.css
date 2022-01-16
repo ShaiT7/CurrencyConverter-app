@@ -1,9 +1,11 @@
 .Menu {
     background-color:darkslategray;
-    height: 30px;
+    height: 40px;
 }
 
 .MenuNav {
     margin: 10px;
     color:white;
+    position: relative;
+    top: 20%;
 }
