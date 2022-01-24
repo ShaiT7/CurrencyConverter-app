@@ -1,8 +1,23 @@
-import { Component, OnInit} from '@angular/core';
-import { HttpClient, HttpErrorResponse} from '@angular/common/http';
-import { Observable, throwError} from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
-import { ConverterserviceService } from '../converterservice.service';
+import {Component, OnInit} from '@angular/core';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {Observable, throwError} from 'rxjs';
+import {catchError, retry } from 'rxjs/operators';
+import {ConverterserviceService } from '../converterservice.service';
+import {NgModule } from '@angular/core';
+import {FormControl , FormGroup, FormsModule, FormGroupDirective, NgForm, Validators, ReactiveFormsModule, AbstractControl} from '@angular/forms';
+import {ErrorStateMatcher} from '@angular/material/core';
+import {FormBuilder} from '@angular/forms';
+
+// app
+import { browserRefresh } from '../app.component';
+
+/** Error when invalid control is dirty, touched, or submitted. */
+// export class MyErrorStateMatcher implements ErrorStateMatcher {
+//   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+//     const isSubmitted = form && form.submitted;
+//     return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+//   }
+// }
 
 @Component({
   selector: 'app-currency-converter',
@@ -11,8 +26,25 @@ import { ConverterserviceService } from '../converterservice.service';
 })
 
 export class CurrencyConverterComponent implements OnInit {
+  
+  form!: FormGroup;
 
-  constructor(private http:HttpClient, private ConverterService:ConverterserviceService) { }
+  public browserRefresh!: boolean;
+
+  inputValueFC = new FormControl('', [Validators.required]);
+  ddCurrencyFrom = new FormControl('', [Validators.required]);
+  ddCurrencyTo = new FormControl('', [Validators.required]);
+
+  // matcher = new MyErrorStateMatcher();
+
+  // !!!
+  // form = new FormGroup({
+  //   inputValueFC: new FormControl('', [Validators.required]),
+  //   ddCurrencyFrom: new FormControl('', [Validators.required]),
+  //   ddCurrencyTo: new FormControl('', [Validators.required]),
+  // });
+
+  constructor(private fb:FormBuilder, private http:HttpClient, private ConverterService:ConverterserviceService) { }
 
   numCur: number = 1;
 
@@ -32,6 +64,15 @@ export class CurrencyConverterComponent implements OnInit {
   toChoosen: string = "";
 
   ngOnInit(): void {
+
+    this.browserRefresh = browserRefresh;
+    
+    this.form = this.fb.group({
+      inputValueFC: ['', [Validators.required]],
+      ddCurrencyFrom: ['', [Validators.required]],
+      ddCurrencyTo: ['', [Validators.required]],
+    })
+
     this.getConfig().subscribe((data:any) => {
       this.config={...data};
       this.getJson().subscribe((data: any) => {
@@ -42,10 +83,41 @@ export class CurrencyConverterComponent implements OnInit {
     },
       (error:HttpErrorResponse)=>{console.log("Error"); this.showWarning();}
     );
+
+    if (browserRefresh == false) {
+
+      // Memory
+
+      try {
+        this.form.get('inputValueFC')!.setValue(localStorage.getItem("value"));
+        this.form.get('ddCurrencyFrom')!.setValue(localStorage.getItem("fromChoosen"));
+        this.form.get('ddCurrencyTo')!.setValue(localStorage.getItem("toChoosen"));
+        this.fromChoosen = localStorage.getItem("fromChoosen")!.toString();
+        this.toChoosen = localStorage.getItem("toChoosen")!.toString();
+      }
+      catch (e){}
+
+    } else {
+
+        try {
+          localStorage.removeItem("value");
+
+          this.form.get('inputValueFC')!.setValue("");
+
+          // if we need memory of Currencies
+          this.form.get('ddCurrencyFrom')!.setValue(localStorage.getItem("fromChoosen"));
+          this.form.get('ddCurrencyTo')!.setValue(localStorage.getItem("toChoosen"));
+          this.fromChoosen = localStorage.getItem("fromChoosen")!.toString();
+          this.toChoosen = localStorage.getItem("toChoosen")!.toString();
+        }
+        catch (e){}
+
+    }
+
   }
 
   configUrl = 'assets/configConverterService.json';
-
+ 
   showWarning() {
       alert("Error communication to API");
   }
@@ -108,19 +180,51 @@ export class CurrencyConverterComponent implements OnInit {
     // });
 
     if (isNaN(total)) {
-        alert("please choose Currency");
+        //alert("please choose Currency");
     } else {
 
-    this.result={
-      value:value,
-      from:this.fromChoosen,
-      to:this.toChoosen,
-      total:total
-    };
+      this.result={
+        value:value,
+        from:this.fromChoosen,
+        to:this.toChoosen,
+        total:total
+      };
 
       // this.listHistory.unshift(this.result);
       this.ConverterService.unshiftHistory(this.result);
+
+      // Memory
+      localStorage.setItem('value', value);
+      localStorage.setItem('fromChoosen', this.fromChoosen);
+      localStorage.setItem('toChoosen', this.toChoosen);
+
     }
 
   }
+  
+  // onSubmit(){
+  //   //checks if form is valid
+  //      if( this.form.valid){
+  //         alert("form is nvalid");
+  //       }
+  // }
+
+  findInvalidControls(value:string) {
+    const invalid = [];
+    const controls = this.form.controls;
+    for (const name in controls) {
+        if (!controls[name].valid) {
+            //alert(name);
+            invalid.push(name);
+        }
+    }
+    console.log(invalid);
+
+    if (invalid.length==0) {
+      this.inputOnChange(value);
+    }
+
+    return invalid;
+  }
+
 }

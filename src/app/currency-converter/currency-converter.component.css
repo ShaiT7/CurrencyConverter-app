@@ -18,5 +18,9 @@
 }
 
 .CurrValue {
-    font-weight: bold;
+    font-weight: normal;
+}
+
+.error_class {
+    color: red;
 }

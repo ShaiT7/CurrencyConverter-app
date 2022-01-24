@@ -2,33 +2,66 @@
 <div class="center">
 <p class="header center"><b>Currency Converter (by Shai Teper)</b></p><br>
 
-<mat-form-field class="example-full-width" appearance="fill">
-    <mat-label>I have:</mat-label>
-    <input #inputValue matInput id="inputValue" name="inputValue" placeholder="1" value="{{numCur}}"  type="number" min="1" autocomplete="off" class="CurrValue" >
-</mat-form-field>
+<!-- {{browserRefresh ? "==> browser refresh <==" : "XX NOT a browser refresh XX" }} -->
 
-<mat-form-field appearance="fill" class="margin">
-  <mat-label>From:</mat-label>
-  <mat-select [(value)]="fromChoosen">
-    <mat-option *ngFor="let item of fromList" [value]="item">
-    {{item}}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
+<form class="form_class" [formGroup]="form" >  <!-- (ngSubmit)="inputOnChange((inputValue.value))" -->
+
+  <mat-form-field class="example-full-width" appearance="fill">
+    <mat-label>I have:</mat-label>
+    <input matInput id="inputValue" name="inputValue" formControlName="inputValueFC" placeholder="enter value" value="{{numCur}}" type="number" minlength="1" min="1" autocomplete="off" class="CurrValue" [required]="true" required="true" #inputValue />
+    <!-- [errorStateMatcher]="matcher" -->
+
+    <mat-hint>How money do you have?</mat-hint>
+
+    <mat-error *ngIf="inputValueFC.hasError('required')">
+      Please enter correct value
+    </mat-error>
+  </mat-form-field>
+
+  <!-- <div>Valid: {{ inputValueFC.valid }}</div> -->
+
+  <mat-form-field appearance="fill" class="margin">
+    <mat-label>From:</mat-label>
+    <mat-select [(value)]="fromChoosen" required id="ddCurrencyFrom" name="ddCurrencyFrom" formControlName="ddCurrencyFrom">
+      <mat-option>select Currency</mat-option>
+      <mat-option *ngFor="let item of fromList" [value]="item">
+      {{item}}
+      </mat-option>
+    </mat-select>
+    <mat-hint>from Currency</mat-hint>
+    <mat-error *ngIf="ddCurrencyFrom.hasError('required')">
+      Please choose Currency
+    </mat-error>
+  </mat-form-field>
+
+  <!-- <div>Valid: {{ ddCurrencyFrom.valid }}</div> -->
 
 <mat-form-field appearance="fill" class="margin">
   <mat-label>To:</mat-label>
-  <mat-select [(value)]="toChoosen">
+  <mat-select [(value)]="toChoosen" required id="ddCurrencyTo" name="ddCurrencyTo" formControlName="ddCurrencyTo">
+    <mat-option>select Currency</mat-option>
     <mat-option *ngFor="let item of toList" [value]="item">
       {{item}}
     </mat-option>
   </mat-select>
+  <mat-hint>to Currency</mat-hint>
+  <mat-error *ngIf="ddCurrencyTo.hasError('required')">
+    Please choose Currency
+  </mat-error>
 </mat-form-field>
 
+<!-- <div>Valid: {{ ddCurrencyTo.valid }}</div> -->
+
+<br><br>
+<div *ngIf="!form.valid" class="error_class">please check all fields</div>
+<!-- <div>all Form ia Valid: {{ !form.valid }}</div> -->
+<br><br>
 <div>
-  <button mat-button (click)="inputOnChange(inputValue.value)" color="primary">Calculate</button>
+  <button mat-button (click)="inputOnChange(inputValue.value)" color="primary" type="submit" [disabled]="!form.valid">Calculate</button>
 
   <!-- <button mat-button (click)="clearHistory()" color="primary">Clear History</button> -->
+
+  <!-- <button (click)="findInvalidControls(inputValue.value)">test</button> -->
 </div>
 
 <br><br>
@@ -40,6 +73,4 @@
         <span>{{result.total}}</span>
         <span>&nbsp;{{result.to}}</span>
     </div>
-</div>
-
 </div>
