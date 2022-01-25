@@ -11,8 +11,10 @@ import { CurrencyConverterHistoryComponent } from './currency-converter-history/
 
 import { FormsModule, ReactiveFormsModule, AbstractControl, FormBuilder } from '@angular/forms';
 
+import { ApiService } from './api.service';
+
 // import {MyErrorStateMatcher} from './currency-converter/currency-converter.component';
-import { ErrorStateMatcher } from '@angular/material/core';
+// import { ErrorStateMatcher } from '@angular/material/core';
 
 const appRoutes:Routes=[
   {path: '', redirectTo: '/converter', pathMatch: 'full'},
@@ -38,7 +40,7 @@ const appRoutes:Routes=[
       {enableTracing:true}
     )
   ],
-  providers: [HttpClientModule, ErrorStateMatcher],
+  providers: [HttpClientModule, ApiService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

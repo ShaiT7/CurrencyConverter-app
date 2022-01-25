@@ -1,12 +1,12 @@
-import {Component, OnInit} from '@angular/core';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {Observable, throwError} from 'rxjs';
-import {catchError, retry } from 'rxjs/operators';
-import {ConverterserviceService } from '../converterservice.service';
-import {NgModule } from '@angular/core';
-import {FormControl , FormGroup, FormsModule, FormGroupDirective, NgForm, Validators, ReactiveFormsModule, AbstractControl} from '@angular/forms';
-import {ErrorStateMatcher} from '@angular/material/core';
-import {FormBuilder} from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError, retry } from 'rxjs/operators';
+import { ConverterserviceService } from '../converterservice.service';
+import { NgModule } from '@angular/core';
+import { FormControl , FormGroup, FormsModule, FormGroupDirective, NgForm, Validators, ReactiveFormsModule, AbstractControl } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
+import { ApiService } from '../api.service';
 
 // app
 import { browserRefresh } from '../app.component';
@@ -44,7 +44,7 @@ export class CurrencyConverterComponent implements OnInit {
   //   ddCurrencyTo: new FormControl('', [Validators.required]),
   // });
 
-  constructor(private fb:FormBuilder, private http:HttpClient, private ConverterService:ConverterserviceService) { }
+  constructor(private fb:FormBuilder, private http:HttpClient, private ConverterService:ConverterserviceService, private api: ApiService) { }
 
   numCur: number = 1;
 
@@ -73,16 +73,33 @@ export class CurrencyConverterComponent implements OnInit {
       ddCurrencyTo: ['', [Validators.required]],
     })
 
-    this.getConfig().subscribe((data:any) => {
-      this.config={...data};
-      this.getJson().subscribe((data: any) => {
-        this.JsonCurrencyData ={... data};
-        this.getFromList();
-        this.getToList();
-      });
-    },
-      (error:HttpErrorResponse)=>{console.log("Error"); this.showWarning();}
-    );
+    //old goint to api
+    // this.getConfig().subscribe((data:any) => {
+    //   this.config={...data};
+    //   this.getJson().subscribe((data: any) => {
+    //     this.JsonCurrencyData ={... data};
+    //     this.getFromList();
+    //     this.getToList();
+    //   });
+    // },
+    //   (error:HttpErrorResponse)=>{console.log("Error"); this.showWarning();}
+    // );
+
+    // old api
+    // this.api.get('users?page=1').subscribe((res: any) => {
+    //   this.users = res;
+    //   console.log('data response', this.users);
+    // });
+
+    this.api.get().subscribe((res: any) => {
+
+      //console.log('data response', res);
+
+      this.JsonCurrencyData ={...res};
+      this.getFromList();
+      this.getToList();
+
+    });
 
     if (browserRefresh == false) {
 
