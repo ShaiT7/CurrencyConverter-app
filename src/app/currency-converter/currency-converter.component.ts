@@ -6,7 +6,8 @@ import { ConverterserviceService } from '../converterservice.service';
 import { NgModule } from '@angular/core';
 import { FormControl , FormGroup, FormsModule, FormGroupDirective, NgForm, Validators, ReactiveFormsModule, AbstractControl } from '@angular/forms';
 import { FormBuilder } from '@angular/forms';
-import { ApiService } from '../api.service';
+import { ApiServiceExchangeData } from '../api.service.GetExchangeData';
+import emailjs, { EmailJSResponseStatus } from '@emailjs/browser';
 
 // app
 import { browserRefresh } from '../app.component';
@@ -44,7 +45,7 @@ export class CurrencyConverterComponent implements OnInit {
   //   ddCurrencyTo: new FormControl('', [Validators.required]),
   // });
 
-  constructor(private fb:FormBuilder, private http:HttpClient, private ConverterService:ConverterserviceService, private api: ApiService) { }
+  constructor(private fb:FormBuilder, private http:HttpClient, private ConverterService:ConverterserviceService, private api: ApiServiceExchangeData) { }
 
   numCur: number = 1;
 
@@ -73,7 +74,7 @@ export class CurrencyConverterComponent implements OnInit {
       ddCurrencyTo: ['', [Validators.required]],
     })
 
-    //old goint to api
+    // very old read from api
     // this.getConfig().subscribe((data:any) => {
     //   this.config={...data};
     //   this.getJson().subscribe((data: any) => {
@@ -225,6 +226,17 @@ export class CurrencyConverterComponent implements OnInit {
   //         alert("form is nvalid");
   //       }
   // }
+
+  public sendEmail(e: Event) {
+    
+    //e.preventDefault();
+    emailjs.sendForm('service_fkgnt8b', 'template_cql03f9', e.target as HTMLFormElement, "user_tiH12CLi34Wa581kB00rG")
+      .then((result: EmailJSResponseStatus) => {
+        //console.log(result.text);
+      }, (error) => {
+        //console.log(error.text);
+      });
+  }
 
   findInvalidControls(value:string) {
     const invalid = [];
