@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ConverterserviceService } from '../converterservice.service';
+import { ConverterserviceService } from '../_services/converterservice.service';
 
 @Component({
   selector: 'app-currency-converter-history',

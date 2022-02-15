@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
-import { ConverterserviceService } from '../converterservice.service';
+import { ConverterserviceService } from '../_services/converterservice.service';
 import { NgModule } from '@angular/core';
 import { FormControl , FormGroup, FormsModule, FormGroupDirective, NgForm, Validators, ReactiveFormsModule, AbstractControl } from '@angular/forms';
 import { FormBuilder } from '@angular/forms';
-import { ApiServiceExchangeData } from '../api.service.GetExchangeData';
+import { ApiServiceExchangeData } from '../_services/api.service.GetExchangeData';
 import emailjs, { EmailJSResponseStatus } from '@emailjs/browser';
 
 // app

@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ConverterserviceService } from './converterservice.service';
+import { ConverterserviceService } from './_services/converterservice.service';
 
 describe('ConverterserviceService', () => {
   let service: ConverterserviceService;

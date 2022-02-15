@@ -11,7 +11,7 @@ import { CurrencyConverterHistoryComponent } from './currency-converter-history/
 
 import { FormsModule, ReactiveFormsModule, AbstractControl, FormBuilder } from '@angular/forms';
 
-import { ApiServiceExchangeData } from './api.service.GetExchangeData';
+import { ApiServiceExchangeData } from './_services/api.service.GetExchangeData';
 
 // import {MyErrorStateMatcher} from './currency-converter/currency-converter.component';
 // import { ErrorStateMatcher } from '@angular/material/core';

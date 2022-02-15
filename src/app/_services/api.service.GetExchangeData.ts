@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import JSON_API_URL from '../assets/configConverterService.json';
+import JSON_API_URL from '../../assets/configConverterService.json';
 
 //const API_URL = 'https://reqres.in';
 const Currency_API_URL = "http://api.exchangeratesapi.io/v1/latest?access_key=a64c0344594dcaeed6fbaedf9706de61&amp;format=1";
